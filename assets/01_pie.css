@@ -1,0 +1,171 @@
+<link rel="stylesheet" type="text/css" href="main.css"/>
+
+* {
+
+}
+.plotly {
+    margin: 0px;
+    background: transparent;
+}
+
+.plotly div {
+    margin: 0px;
+    background: transparent;
+}
+
+.plot-container plotly {
+    margin: 0px;
+    background: transparent;
+}
+
+.js-plotly-plot {
+    margin: 0px;
+    background: transparent;
+}
+
+.main-svg {
+    background: transparent;
+
+}
+
+svg.main-svg {
+    background: transparent;
+
+}
+
+.pielayer {
+
+}
+
+g.pielayer {
+
+}
+
+g.trace {
+
+}
+
+g.slice {
+
+}
+
+g.slicetext {
+
+}
+
+path.surface {
+    background: transparent;
+}
+
+g.infolayer {
+
+}
+
+g.legend {
+    position: relative;
+
+}
+
+g.scrollbox {
+
+}
+
+g.groups {
+
+}
+
+g.traces {
+
+}
+
+.svg-container {
+    background: transparent;
+}
+
+.user-select-none {
+    margin: 0px;
+    background: transparent;
+}
+
+.user-select-none.svg-container {
+    margin: 0px;
+    background: transparent;
+}
+
+.clientMedia {
+
+}
+
+.clientWifi {
+
+}
+
+.clientSignal {
+
+}
+
+.clientTable {
+
+}
+
+.systemTable {
+    margin: 0px;
+}
+
+.tableHeader {
+    font-weight: bold;
+    color: black;
+
+}
+
+.tableCell {
+    color: #1E90FF
+}
+
+#ClientMediaBlock {
+    text-align: center;
+}
+
+#ClientMediaHeader {
+    text-align: center;
+    font-size: 28px;
+    text-shadow: 2px 2px 5px lightgrey;
+}
+
+#ClientMedia {
+    height: 275px;
+}
+
+#ClientWifiBlock {
+    text-align: center;
+}
+
+#ClientWifiHeader {
+    text-align: center;
+    font-size: 28px;
+    text-shadow: 2px 2px 5px lightgrey;
+}
+
+#ClientWifi {
+    height: 275px;
+}
+
+#ClientSignalBlock {
+    text-align: center;
+}
+
+#ClientSignalHeader {
+    text-align: center;
+    font-size: 28px;
+    text-shadow: 2px 2px 5px lightgrey;
+}
+
+#ClientSignal {
+    height: 290px;
+}
+
+#SysInfoTable {
+    magin: 0px;
+    padding: 0px;
+    height: 250px;
+}
