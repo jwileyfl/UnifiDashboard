@@ -388,11 +388,19 @@ def config_charts():
             cells=dict(values=[dfSystem.Type, dfSystem.Name, dfSystem.Hostname, dfSystem.Ip, dfSystem.Version, dfSystem.Update, dfSystem.PkgVersion, dfSystem.PkgUpdate]))
         ])
 
+    #systemTable.update_layout(font=dict(
+    #    color='#ffffff'
+    #))
+
+    systemTable.update_layout(paper_bgcolor="black")
+
     clientTable = plotly.graph_objects.Figure(
         data=[plotly.graph_objects.Table(
             header=dict(values=tableHeaders),
             cells=dict(values=clientList))
         ])
+
+    clientTable.update_layout(paper_bgcolor="black")
 
     mediaPie = plotly.graph_objects.Figure(
         data=[
@@ -405,7 +413,8 @@ def config_charts():
         marker=dict(
             colors=['#1E90FF', '#81C784'],
             line=dict(
-                color='#000000',
+                color='#ffffff',
+                # color='#000000',
                 width=0.5)))
 
     mediaPie.update_layout(legend=dict(
@@ -415,6 +424,10 @@ def config_charts():
         x=0
     ))
 
+    mediaPie.update_layout(font=dict(
+        color='#ffffff'
+    ))
+    mediaPie.update_layout(paper_bgcolor="black")
     #dfWifi = pd.DataFrame(tmpWifi)
 
     wifiPie = plotly.graph_objects.Figure(
@@ -431,7 +444,8 @@ def config_charts():
         marker=dict(
             colors=['#81C784', '#1E90FF', '#F0E68C'],
             line=dict(
-                color='#000000',
+                color='#ffffff',
+                # color='#000000',
                 width=0.5)))
 
     wifiPie.update_layout(legend=dict(
@@ -441,7 +455,11 @@ def config_charts():
         x=0
     ))
 
-    #wifiPie.update_layout(paper_bgcolor="black")
+    wifiPie.update_layout(font=dict(
+        color='#ffffff'
+    ))
+
+    wifiPie.update_layout(paper_bgcolor="black")
 
     signalPie = plotly.graph_objects.Figure(
         data=[
@@ -457,7 +475,8 @@ def config_charts():
         marker=dict(
             colors=['#FA8072', '#EFAB2C', '#F0E68C', '#81C784' ],
             line=dict(
-                color='#000000',
+                color='#ffffff',
+                # color='#000000',
                 width=0.5)))
 
     signalPie.update_layout(legend=dict(
@@ -467,19 +486,25 @@ def config_charts():
         x=0
     ))
 
+    signalPie.update_layout(font=dict(
+        color='#ffffff'
+    ))
+
+    signalPie.update_layout(paper_bgcolor="black")
+
 
 def serve_layout():
     logger.debug('serve_layout()')
     fetch_client_data()
     config_charts()
     return html.Div(
-        id='layout',
+        id='layout',style={'background-color': '#000000', 'color': '#ffffff'},
         children=[
-            html.Div([html.H1(children='Clients', style={'display': 'inline-block'})]),
-            html.Div([html.Div(['Wired/Wireless'], id='ClientMediaHeader', style={'display': 'inline-block'}), dcc.Graph(id="ClientMedia", className='clientMedia', figure=mediaPie), dcc.Interval(id='interval-component', interval=30*1000, n_intervals=0)], style={'margin': '1', 'display': 'inline-block', 'width': '30%'}, id='ClientMediaBlock'),
-            html.Div([html.Div(['Wifi Network'], id='ClientWifiHeader', style={'display': 'inline-block'}), dcc.Graph(id="ClientWifi", className='clientWifi', figure=wifiPie), dcc.Interval(id='interval-component2', interval=30*1000, n_intervals=0)], style={'margin': '1', 'display': 'inline-block', 'width': '30%'}, id='ClientWifiBlock'),
-            html.Div([html.Div(['Signal Strength'], id='ClientSignalHeader', style={'display': 'inline-block'}), dcc.Graph(id="ClientSignal", className='clientSignal', figure=signalPie), dcc.Interval(id='interval-component3', interval=30*1000, n_intervals=0)], style={'margin': '1', 'display': 'inline-block', 'width': '30%'}, id='ClientSignalBlock'),
-            html.Div([dcc.Graph(id='SysInfoTable', className='systemTable', figure=systemTable), dcc.Interval(id='interval-component4', interval=60*1000, n_intervals=0)]),
+            html.Div([html.H1(children='Unifi Server Dashboard', style={'display': 'inline-block','color': '#ffffff', 'background-color': '#000000'})]),
+            html.Div([html.Div(['Wired/Wireless'], id='ClientMediaHeader', style={'display': 'inline-block','color': '#ffffff', 'background-color': '#000000'}), dcc.Graph(id="ClientMedia", className='clientMedia', figure=mediaPie), dcc.Interval(id='interval-component', interval=30*1000, n_intervals=0)], style={'margin': '1', 'display': 'inline-block', 'width': '30%'}, id='ClientMediaBlock'),
+            html.Div([html.Div(['Wifi Network'], id='ClientWifiHeader', style={'display': 'inline-block','color': '#ffffff', 'background-color': '#000000'}), dcc.Graph(id="ClientWifi", className='clientWifi', figure=wifiPie), dcc.Interval(id='interval-component2', interval=30*1000, n_intervals=0)], style={'margin': '1', 'display': 'inline-block', 'width': '30%'}, id='ClientWifiBlock'),
+            html.Div([html.Div(['Signal Strength'], id='ClientSignalHeader', style={'display': 'inline-block','color': '#ffffff', 'background-color': '#000000'}), dcc.Graph(id="ClientSignal", className='clientSignal', figure=signalPie), dcc.Interval(id='interval-component3', interval=30*1000, n_intervals=0)], style={'margin': '1', 'display': 'inline-block', 'width': '30%'}, id='ClientSignalBlock'),
+            html.Div([html.Div([''], style={'background-color': '#000000'}), dcc.Graph(id='SysInfoTable', className='systemTable', figure=systemTable, style={'background-color': '#000000'}), dcc.Interval(id='interval-component4', interval=60*1000, n_intervals=0)]),
             html.Div([dcc.Graph(id='Table', className='clientTable', figure=clientTable), dcc.Interval(id='interval-component5', interval=30*1000, n_intervals=0)]),
         ])
 
