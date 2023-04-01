@@ -1,6 +1,7 @@
 import os
 import unificontrol
 import dash
+import requests
 from dash import dcc
 from dash import html
 from dash.dependencies import Input
@@ -164,8 +165,18 @@ def encrypt_credentials(userName: str, password: str, key: bytes):
 
 
 def decrypt_credentials(encryptedUserName: str, encryptedPassword: str, key: bytes):
-    userName: str = cryptography.fernet.Fernet(key).decrypt(encryptedUserName.encode('utf-8')).decode('utf-8')
-    password: str = cryptography.fernet.Fernet(key).decrypt(encryptedPassword.encode('utf-8')).decode('utf-8')
+    userName: str = ""
+    password: str = ""
+    try:
+        userName = cryptography.fernet.Fernet(key).decrypt(encryptedUserName.encode('utf-8')).decode('utf-8')
+        password = cryptography.fernet.Fernet(key).decrypt(encryptedPassword.encode('utf-8')).decode('utf-8')
+    except cryptography.exceptions.InvalidSignature:
+        print('Key used to decrypt credentials is invalid')
+    except cryptography.fernet.InvalidToken:
+        print('Key used to decrypt credentials is invalid')
+    except Exception as ex:
+        print(ex)
+
     return userName, password
 
 
@@ -508,28 +519,44 @@ def serve_layout():
             html.Div([dcc.Graph(id='Table', className='clientTable', figure=clientTable), dcc.Interval(id='interval-component5', interval=30*1000, n_intervals=0)]),
         ])
 
+def shutdown():
+    requests.post('http://127.0.0.1:8050/shutdown')
+
 
 app = dash.Dash(__name__, meta_tags=[{ "http-equiv": "refresh", "content": "60" }])
 
 try:
     init_logger()
 
-    # get configuration
-    if not fileExists(configFile):
+    # create key
+    if not fileExists(keyFile):
         key = generate_key()
         store_key(key, keyFile)
+
+    # get key
+    key = get_key(keyFile)
+
+    # create app configuration
+    if not fileExists(configFile):
         
         hst, prt, u, p = get_config_from_user()
         e_u, e_p = encrypt_credentials(u, p, key)
 
         create_config_file(create_config_dict(hst, prt, e_u, e_p), configFile)
 
+    # get app configuration
     appConf = read_config_file(configFile)    
     unifiHostName, unifiPort = get_stored_server_config(appConf)
-    key = get_key(keyFile)
+       
+    # decrypt credentials
     uN, pW = get_stored_credentials(appConf)
     unifiUserName, unifiPW = decrypt_credentials(uN, pW, key)
 
+    if unifiUserName == '' or unifiPW == '':
+        print('Unable to continue without login credentials')
+        quit()
+
+    # initialize the connection with unifi controller 
     controller = init_controller()
     fetch_static_data()
     #update_data()
@@ -538,8 +565,9 @@ try:
     app.layout = serve_layout
 except socket.error as se:
     print('Web application server failed to start')
-except dash.exceptions as de:
-    print(de)
+except Exception as ex:
+    print(ex)
+
 
 #@app.callback(Output('Table', 'figure'), Input('interval-component4', 'n_intervals'))
 #def update_table(n):
